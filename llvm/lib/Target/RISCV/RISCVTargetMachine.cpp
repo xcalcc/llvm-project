@@ -178,6 +178,10 @@ public:
   void addMachineSSAOptimization() override;
   void addPreRegAlloc() override;
   void addPostRegAlloc() override;
+
+  // xcal passes
+  void addMachineLateOptimization() override;
+  void addXcalPeephole();
 };
 } // namespace
 
@@ -285,3 +289,10 @@ bool RISCVTargetMachine::parseMachineFunctionInfo(
   PFS.MF.getInfo<RISCVMachineFunctionInfo>()->initializeBaseYamlFields(YamlMFI);
   return false;
 }
+
+void RISCVPassConfig::addMachineLateOptimization() {
+  // hack here
+  addXcalPeephole();
+}
+
+void RISCVPassConfig::addXcalPeephole() { addPass(createXcalPeepholePass()); }
